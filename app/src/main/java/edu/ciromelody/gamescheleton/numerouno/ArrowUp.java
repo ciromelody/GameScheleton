@@ -26,6 +26,15 @@ public class ArrowUp {
      int minX;
      int velocita;
 
+    public String getNomeSprite() {
+        return nomeSprite;
+    }
+
+    public void setNomeSprite(String nomeSprite) {
+        this.nomeSprite = nomeSprite;
+    }
+
+    String nomeSprite;
     // A hit box for collision detection
     private Rect hitBox;
 
@@ -38,7 +47,7 @@ public class ArrowUp {
     }
 
     boolean invertiDirezione;
-    public ArrowUp(Context context, int schermoX, int schermoY) {
+    public ArrowUp(Context context, int schermoX, int schermoY,String nomeSprite) {
         this.context=context;
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
@@ -52,6 +61,7 @@ public class ArrowUp {
         maxY=altezzaSchermo-bitmap.getHeight();
         velocita=4;
         invertiDirezione=false;
+        this.nomeSprite=nomeSprite;
 
     }
 

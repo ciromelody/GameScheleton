@@ -52,7 +52,7 @@ boolean playing;
 
     private void iniziaGioco() {
         arrow=new Arrow((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
-        arrowUp=new ArrowUp((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowUp=new ArrowUp((GameActivity)getContext(),larghezzaschermo,altezzaschermo,"frecciasu");
         angolodirotazione=0;
         collisionetraduevettori=false;
         visibile=true;
