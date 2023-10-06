@@ -1,10 +1,12 @@
 package edu.ciromelody.gamescheleton.numerouno;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -37,6 +39,7 @@ boolean playing;
     boolean collisionetraduevettori;
     boolean visibile;
     BitmapUtility bitmapUtility;
+    AssetManager assetManager;
     public GameVew(Context context,int lunghezza_in_pixel_asse_X,int lunghezza_in_pixel_asse_Y){
         super(context);
         this.context=context;
@@ -46,7 +49,7 @@ boolean playing;
         // disegnare testo e oggetti
         ourHolder = getHolder();
         paint = new Paint();
-
+        assetManager = context.getAssets();
         iniziaGioco();
     }
 
@@ -92,6 +95,9 @@ boolean playing;
             canvas.drawColor(Color.argb(255, 0, 0, 0));
 
 
+            Typeface tf = Typeface.createFromAsset(assetManager, "vag-rounded-black.ttf");
+
+            paint.setTypeface(tf);
 
 
             paint.setTextAlign(Paint.Align.LEFT);
