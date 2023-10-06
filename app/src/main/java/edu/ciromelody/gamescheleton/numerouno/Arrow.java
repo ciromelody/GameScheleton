@@ -28,7 +28,22 @@ public class Arrow {
 
     // A hit box for collision detection
     private Rect hitBox;
-    boolean invertiDirezione=false;
+
+    public void setRuota(boolean ruota) {
+        this.ruota = ruota;
+    }
+
+    boolean ruota;
+
+    public void setInvertiDirezione(boolean invertiDirezione) {
+        this.invertiDirezione = invertiDirezione;
+    }
+
+    public boolean isInvertiDirezione() {
+        return invertiDirezione;
+    }
+
+    boolean invertiDirezione;
     public Arrow(Context context,int schermoX,int schermoY) {
         this.context=context;
         larghezzaSchermo=schermoX;
@@ -42,6 +57,8 @@ public class Arrow {
         minY=0;
         maxY=altezzaSchermo-bitmap.getHeight();
         velocita=4;
+        invertiDirezione=false;
+        ruota=false;
 
     }
 
@@ -96,6 +113,20 @@ public class Arrow {
 
     }
     public void drawArrow(Canvas canvas){
+
+
         canvas.drawBitmap(bitmap,positionX,positionY,null);
+    }
+    public  Bitmap RotateBitmap(Canvas canvas, float angle)
+    {
+        // ruota tutto il canvas questo funziona
+        canvas.save();
+        canvas.rotate(angle, positionX +bitmap.getWidth()/2, positionY + bitmap.getHeight() / 2);
+        canvas.drawBitmap(bitmap, positionX, positionY, null);
+        canvas.restore();
+
+
+
+        return bitmap;
     }
 }

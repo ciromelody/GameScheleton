@@ -25,8 +25,8 @@ public int altezza_in_metri_dello_schermo;
 public int pixelXmetro_lunghezza;
 public int pixelXmetro_altezza;
 public int numero_di_giri_fatti_in_un_secondo=1;//metto 1 per evitare l'overflow
-public int velocita_metro_al_secondo_asseX;
-public int velocita_metro_al_secondo_asseY;
+public static int velocita_metro_al_secondo_asseX;
+public static int velocita_metro_al_secondo_asseY;
 GameVew gameVew;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +52,9 @@ GameVew gameVew;
         pixelXmetro_lunghezza=lunghezza_in_pixel_dello_schermo/lunghezza_in_metri_dello_schermo;
         pixelXmetro_altezza=altezza_in_pixel_dello_schermo/altezza_in_metri_dello_schermo;
         Log.d("GAME","pixel x metro sull asse X:"+ pixelXmetro_lunghezza+" pixel x metro sull asse Y:"+pixelXmetro_altezza);
-        velocita_metro_al_secondo_asseX=pixelXmetro_lunghezza/numero_di_giri_fatti_in_un_secondo;
-        velocita_metro_al_secondo_asseY=pixelXmetro_altezza/numero_di_giri_fatti_in_un_secondo;
+
     }
+
     //questo bloccherà il thread della gameview
     @Override
     protected void onPause() {

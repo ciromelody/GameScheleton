@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.SurfaceTexture;
-import android.util.AttributeSet;
 
-import android.view.SurfaceControl;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import androidx.annotation.NonNull;
+import edu.ciromelody.gamescheleton.utility.BitmapUtility;
+
 
 public class GameVew extends SurfaceView implements Runnable {
 Context context;
@@ -29,21 +27,35 @@ boolean playing;
     private long framerate;
     private long cicliPerSecondo;
     private long velocita;
+    long tempoDiAttesa;
     private int contatoreCicli;
-
+    int lunghezza_in_metri_dello_schermo=34;
+    int altezza_in_metri_dello_schermo=13;
+    int angolodirotazione;
+    Arrow arrow;
+    ArrowUp arrowUp;
+    boolean collisionetraduevettori;
+    boolean visibile;
+    BitmapUtility bitmapUtility;
     public GameVew(Context context,int lunghezza_in_pixel_asse_X,int lunghezza_in_pixel_asse_Y){
         super(context);
         this.context=context;
         larghezzaschermo=lunghezza_in_pixel_asse_X;
         altezzaschermo=lunghezza_in_pixel_asse_Y;
-
+        tempoDiAttesa=17;
         // disegnare testo e oggetti
         ourHolder = getHolder();
         paint = new Paint();
+
         iniziaGioco();
     }
 
     private void iniziaGioco() {
+        arrow=new Arrow((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowUp=new ArrowUp((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        angolodirotazione=0;
+        collisionetraduevettori=false;
+        visibile=true;
 
     }
 
@@ -60,7 +72,14 @@ boolean playing;
     }
 
     private void update() {
+        arrow.update();
+        arrowUp.update();
+        if(arrow.getHitBox().intersect(arrowUp.getHitBox())){
+            // i due oggetti si sono toccati
 
+            collisionetraduevettori = !collisionetraduevettori;
+
+        }
     }
 
 
@@ -79,6 +98,20 @@ boolean playing;
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(50);
             canvas.drawText("Frequenza:" + frequenza + " Hz", 10, 50, paint);
+            canvas.drawText("Velocita:" + velocita + " m/s", 10, 100, paint);
+            canvas.drawText("trmpo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
+
+
+
+            arrow.setRuota(true);
+              // arrow.drawArrow(canvas);
+            angolodirotazione++;
+            if(angolodirotazione>359){angolodirotazione=0;}
+            arrow.RotateBitmap(canvas,angolodirotazione);
+
+            if(collisionetraduevettori){
+                ruotaspazzatura(canvas);
+            }else { arrowUp.drawArrow(canvas);}
             //Sblocchiamo e disegnamo
             ourHolder.unlockCanvasAndPost(canvas);
         }
@@ -86,7 +119,8 @@ boolean playing;
 
     private void control() {
         try {
-            gameThread.sleep(17);
+            if(tempoDiAttesa<2){tempoDiAttesa=2;}
+            gameThread.sleep(tempoDiAttesa);
         } catch (InterruptedException e) {
 
         }
@@ -94,8 +128,15 @@ boolean playing;
         framerate=tempoDiArrivo-tempoDiPartenza;
         if(cicliPerSecondo>=1000){
             frequenza=contatoreCicli;
+            velocita= (larghezzaschermo/lunghezza_in_metri_dello_schermo)/frequenza;
             cicliPerSecondo=0;
             contatoreCicli=0;
+            if(frequenza>=31){
+                tempoDiAttesa+=1;
+            }
+            if(frequenza<=29){
+                tempoDiAttesa-=1;
+            }
         }else {
             contatoreCicli+=1;
             cicliPerSecondo=cicliPerSecondo+framerate;}
@@ -112,5 +153,12 @@ boolean playing;
         } catch (InterruptedException e) {
 
         }
+    }
+    private void ruotaspazzatura(Canvas canvas) {
+
+        angolodirotazione++;
+        if(angolodirotazione>359){angolodirotazione=0;}
+        // Log.e("MAIN", "palloncino6.RotateBitmap(canvas,angolodirotazione) "+ palloncino6.getNomesprite());
+        arrowUp.RotateBitmap(canvas,angolodirotazione);
     }
 }

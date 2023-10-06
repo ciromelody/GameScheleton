@@ -108,4 +108,17 @@ public class ArrowUp {
     public void drawArrow(Canvas canvas){
         canvas.drawBitmap(bitmap,positionX,positionY,null);
     }
+
+    public  Bitmap RotateBitmap(Canvas canvas, float angle)
+    {
+        // ruota tutto il canvas questo funziona
+        canvas.save();
+        canvas.rotate(angle, positionX +bitmap.getWidth()/2, positionY + bitmap.getHeight() / 2);
+        canvas.drawBitmap(bitmap, positionX, positionY, null);
+        canvas.restore();
+
+
+
+        return bitmap;
+    }
 }
