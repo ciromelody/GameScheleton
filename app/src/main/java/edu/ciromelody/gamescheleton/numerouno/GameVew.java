@@ -147,8 +147,8 @@ boolean playing;
 
             canvas.drawText("vel:" + Costanti.velocita,arrowLeft.positionX+arrowLeft.getBitmap().getWidth(), arrowRight.positionY+arrowRight.getBitmap().getHeight()/2, paint);
 
-
-               arrow.drawArrow(canvas);
+            canvas.drawText("La velocità è sempre identica anche se varia la frequenza del telefono",0,550,paint);
+                    arrow.drawArrow(canvas);
                arrowUp.drawArrow(canvas);
                arrowLeft.drawArrow(canvas);
                arrowRight.drawArrow(canvas);
