@@ -47,6 +47,7 @@ boolean playing;
     boolean visibile;
     BitmapUtility bitmapUtility;
     AssetManager assetManager;
+    int tempo_intercorso;
 
     int altezza_in_metri_arrow;
     public GameVew(Context context,int lunghezza_in_pixel_asse_X,int lunghezza_in_pixel_asse_Y){
@@ -98,15 +99,20 @@ boolean playing;
         arrow.setPositionY(altezzaschermo/2-arrow.getBitmap().getHeight());
         if(Rect.intersects(dito.getHitBox(),arrowLeft.getHitBox())){
             //diminuisci velocita
-            if(Costanti.velocita>0){
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+              if(Costanti.velocita>0){
                    Costanti.velocita-=1;} else if (Costanti.velocita==0) {
                 Costanti.velocita=0;
 
+                }
             }
+            tempo_intercorso=Costanti.secondi;
         }
         if(Rect.intersects(dito.getHitBox(),arrowRight.getHitBox())){
             //aumenta velocita
-            Costanti.velocita+=1;
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+                    Costanti.velocita+=1;}
+            tempo_intercorso=Costanti.secondi;
             Log.d("TOUCH","contatto:dito freccia destra");
         }
     }
@@ -130,14 +136,14 @@ boolean playing;
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(50);
             canvas.drawText("Frequenza:" + frequenza + " Hz", 10, 50, paint);
-            canvas.drawText("Velocita:" + velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita"+Costanti.pixelXmetro_lunghezza*velocita+" pixel al secondo", 10, 100, paint);
+            canvas.drawText("Velocita:" + Costanti.velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita "+Costanti.pixelXmetro_lunghezza*Costanti.velocita+" :pixel al secondo", 10, 100, paint);
             canvas.drawText("tempo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
             canvas.drawText("Lunghezza in pixel:" + larghezzaschermo, 10, 200, paint);
             canvas.drawText("Altezza  in pixel:" + altezzaschermo, 10, 250, paint);
             canvas.drawText("pixel per metro asse X:" + Costanti.pixelXmetro_lunghezza, 10, 300, paint);
             canvas.drawText("pixel per metro asse Y:" + Costanti.pixelXmetro_altezza, 10, 350, paint);
             canvas.drawText("secondi:" + Costanti.secondi, 10, 400, paint);
-            canvas.drawText("Costanti.velocita:" + Costanti.velocita,arrowRight.positionX-arrowRight.positionX/2, arrowRight.positionY, paint);
+            canvas.drawText("vel:" + Costanti.velocita,arrowLeft.positionX+arrowLeft.getBitmap().getWidth(), arrowRight.positionY+arrowRight.getBitmap().getHeight()/2, paint);
 
 
                arrow.drawArrow(canvas);
