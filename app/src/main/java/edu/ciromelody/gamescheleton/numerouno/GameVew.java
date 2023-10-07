@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import edu.ciromelody.gamescheleton.utility.BitmapUtility;
+import edu.ciromelody.gamescheleton.utility.Costanti;
 
 
 public class GameVew extends SurfaceView implements Runnable {
@@ -40,16 +42,20 @@ boolean playing;
     boolean visibile;
     BitmapUtility bitmapUtility;
     AssetManager assetManager;
+
+    int altezza_in_metri_arrow;
     public GameVew(Context context,int lunghezza_in_pixel_asse_X,int lunghezza_in_pixel_asse_Y){
         super(context);
         this.context=context;
         larghezzaschermo=lunghezza_in_pixel_asse_X;
         altezzaschermo=lunghezza_in_pixel_asse_Y;
+        Log.d("GAME","larghezza:"+larghezzaschermo+" Altezza:"+ altezzaschermo);
         tempoDiAttesa=17;
         // disegnare testo e oggetti
         ourHolder = getHolder();
         paint = new Paint();
         assetManager = context.getAssets();
+
         iniziaGioco();
     }
 
@@ -59,6 +65,8 @@ boolean playing;
         angolodirotazione=0;
         collisionetraduevettori=false;
         visibile=true;
+        altezza_in_metri_arrow=2*(altezzaschermo/altezza_in_metri_dello_schermo); //due metri
+
 
     }
 
@@ -77,6 +85,8 @@ boolean playing;
     private void update() {
         arrow.update();
         arrowUp.update();
+
+        arrow.setPositionY(altezzaschermo/2-arrow.getBitmap().getHeight());
         if(arrow.getHitBox().intersect(arrowUp.getHitBox())){
             // i due oggetti si sono toccati
 
@@ -104,20 +114,33 @@ boolean playing;
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(50);
             canvas.drawText("Frequenza:" + frequenza + " Hz", 10, 50, paint);
-            canvas.drawText("Velocita:" + velocita + " m/s", 10, 100, paint);
-            canvas.drawText("trmpo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
+            canvas.drawText("Velocita:" + velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita"+Costanti.pixelXmetro_lunghezza*velocita+" pixel al secondo", 10, 100, paint);
+            canvas.drawText("tempo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
+            canvas.drawText("Lunghezza in pixel:" + larghezzaschermo, 10, 200, paint);
+            canvas.drawText("Altezza  in pixel:" + altezzaschermo, 10, 250, paint);
+            canvas.drawText("pixel per metro asse X:" + Costanti.pixelXmetro_lunghezza, 10, 300, paint);
+            canvas.drawText("pixel per metro asse Y:" + Costanti.pixelXmetro_altezza, 10, 350, paint);
+            canvas.drawText("secondi:" + Costanti.secondi, 10, 400, paint);
 
 
 
-            arrow.setRuota(true);
-              // arrow.drawArrow(canvas);
-            angolodirotazione++;
-            if(angolodirotazione>359){angolodirotazione=0;}
-            arrow.RotateBitmap(canvas,angolodirotazione);
+               arrow.drawArrow(canvas);
+               arrowUp.drawArrow(canvas);
+
+
+
+
+
+
+
+            //canvas.drawCircle(arrow.positionX+(arrow.getBitmap().getWidth())/2, arrow.positionY+(arrow.getBitmap().getHeight())/2, arrow.getBitmap().getWidth(), paint);
+
 
             if(collisionetraduevettori){
-                ruotaspazzatura(canvas);
-            }else { arrowUp.drawArrow(canvas);}
+
+            }else {
+
+            }
             //Sblocchiamo e disegnamo
             ourHolder.unlockCanvasAndPost(canvas);
         }
@@ -137,6 +160,8 @@ boolean playing;
             velocita= (larghezzaschermo/lunghezza_in_metri_dello_schermo)/frequenza;
             cicliPerSecondo=0;
             contatoreCicli=0;
+            Costanti.frequenza=frequenza;
+            Costanti.secondi+=1;
             if(frequenza>=31){
                 tempoDiAttesa+=1;
             }
@@ -160,11 +185,5 @@ boolean playing;
 
         }
     }
-    private void ruotaspazzatura(Canvas canvas) {
 
-        angolodirotazione++;
-        if(angolodirotazione>359){angolodirotazione=0;}
-        // Log.e("MAIN", "palloncino6.RotateBitmap(canvas,angolodirotazione) "+ palloncino6.getNomesprite());
-        arrowUp.RotateBitmap(canvas,angolodirotazione);
-    }
 }

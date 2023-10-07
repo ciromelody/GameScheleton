@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import edu.ciromelody.gamescheleton.R;
+import edu.ciromelody.gamescheleton.utility.BitmapUtility;
+import edu.ciromelody.gamescheleton.utility.Costanti;
 
 public class ArrowUp {
     Context context;
@@ -52,6 +54,7 @@ public class ArrowUp {
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup);
+        bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
         positionX=0;
         positionY=0;
         hitBox = new Rect(positionX, positionY, bitmap.getWidth(), bitmap.getHeight());
@@ -59,7 +62,7 @@ public class ArrowUp {
         maxX=larghezzaSchermo-bitmap.getWidth();
         minY=0;
         maxY=altezzaSchermo-bitmap.getHeight();
-        velocita=4;
+        velocita=1;
         invertiDirezione=false;
         this.nomeSprite=nomeSprite;
 
@@ -108,27 +111,16 @@ public class ArrowUp {
         if(positionY<0){positionY=0;};
         if(positionY>maxY){positionY=maxY;};
         if(!invertiDirezione){
-            if(positionY==maxY){invertiDirezione=true;}else { positionY+=velocita;}
+            if(positionY==maxY){invertiDirezione=true;}else { positionY+=velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);;}
         }else {
-            if(positionY==minY){invertiDirezione=false;}else {  positionY-=velocita;;}
+            if(positionY==minY){invertiDirezione=false;}else {  positionY-=velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);}
            }
 
 
     }
     public void drawArrow(Canvas canvas){
+
         canvas.drawBitmap(bitmap,positionX,positionY,null);
     }
 
-    public  Bitmap RotateBitmap(Canvas canvas, float angle)
-    {
-        // ruota tutto il canvas questo funziona
-        canvas.save();
-        canvas.rotate(angle, positionX +bitmap.getWidth()/2, positionY + bitmap.getHeight() / 2);
-        canvas.drawBitmap(bitmap, positionX, positionY, null);
-        canvas.restore();
-
-
-
-        return bitmap;
-    }
 }

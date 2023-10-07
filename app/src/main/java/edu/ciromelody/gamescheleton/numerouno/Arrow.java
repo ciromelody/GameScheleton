@@ -1,12 +1,18 @@
 package edu.ciromelody.gamescheleton.numerouno;
 
+import static edu.ciromelody.gamescheleton.utility.Costanti.altezza_in_metri_arrow;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import edu.ciromelody.gamescheleton.R;
+import edu.ciromelody.gamescheleton.utility.BitmapUtility;
+import edu.ciromelody.gamescheleton.utility.Costanti;
 
 public class Arrow {
     Context context;
@@ -25,6 +31,7 @@ public class Arrow {
      int maxX;
      int minX;
      int velocita;
+    int angolodirotazione;
 
     // A hit box for collision detection
     private Rect hitBox;
@@ -34,6 +41,7 @@ public class Arrow {
     }
 
     boolean ruota;
+    Paint paintsbagliato;
 
     public void setInvertiDirezione(boolean invertiDirezione) {
         this.invertiDirezione = invertiDirezione;
@@ -48,17 +56,25 @@ public class Arrow {
         this.context=context;
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
+        inizializza();
+
+    }
+
+  public void inizializza() {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft);
-        positionX=50;
-        positionY=50;
+        bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
+        positionX=0;
+        positionY=altezzaSchermo/2;
+        Log.d("GAME"," positionX:"+ positionX+"  positionY:"+ positionY);
         hitBox = new Rect(positionX, positionY, bitmap.getWidth(), bitmap.getHeight());
         minX=0;
-        maxX=larghezzaSchermo-bitmap.getWidth();
+        maxX=larghezzaSchermo-getBitmap().getWidth();
         minY=0;
-        maxY=altezzaSchermo-bitmap.getHeight();
-        velocita=4;
+        maxY=altezzaSchermo-getBitmap().getHeight();
+        velocita=1;
         invertiDirezione=false;
         ruota=false;
+        paintsbagliato=new Paint();
 
     }
 
@@ -105,17 +121,26 @@ public class Arrow {
         if(positionY<0){positionY=0;};
         if(positionY>maxY){positionY=maxY;};
         if(!invertiDirezione){
-            if(positionX==maxX){invertiDirezione=true;}else { positionX+=velocita;}
+            if(positionX==maxX){invertiDirezione=true;}else { positionX+=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
         }else {
-            if(positionX==minX){invertiDirezione=false;}else {  positionX-=velocita;;}
+            if(positionX==minX){invertiDirezione=false;}else {  positionX-=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
            }
-
+        angolodirotazione++;
+        if(angolodirotazione>359){angolodirotazione=0;}
 
     }
     public void drawArrow(Canvas canvas){
 
 
         canvas.drawBitmap(bitmap,positionX,positionY,null);
+       /* cambiaDimensioneBitmap(altezza_in_metri_arrow*3,altezza_in_metri_arrow*3);
+
+        RotateBitmap(canvas,angolodirotazione);
+        canvas.drawPath(BitmapUtility.disegnaCroce(positionX, positionY,this,paintsbagliato),paintsbagliato);
+        BitmapUtility.disegnaEsplosioneBitmap(canvas,BitmapUtility.splitBitmap(getBitmap(),5,5),positionX,positionY);
+        canvas.drawPath(BitmapUtility.disegnaCroce( positionX, positionY,this,paintsbagliato),paintsbagliato);
+        RotateBitmap(canvas,angolodirotazione);*/
+
     }
     public  Bitmap RotateBitmap(Canvas canvas, float angle)
     {
@@ -128,5 +153,11 @@ public class Arrow {
 
 
         return bitmap;
+    }
+    private void cambiaDimensioneBitmap(int larghezza,int altezza){
+
+        int rapporto= getBitmap().getWidth()/ getBitmap().getHeight();
+        Bitmap nuovoBitmap =Bitmap.createScaledBitmap(  getBitmap(), larghezza*rapporto, altezza, false);
+        setBitmap(nuovoBitmap);
     }
 }

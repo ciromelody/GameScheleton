@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import edu.ciromelody.gamescheleton.R;
+import edu.ciromelody.gamescheleton.utility.Costanti;
 
 public class GameActivity extends AppCompatActivity {
 //stabiliamo che il nostro schermo sia di 34 metri in lunghezza e 13 metri in altezza
@@ -18,12 +19,7 @@ public class GameActivity extends AppCompatActivity {
 //purtroppo questo non ci da la certezza che un giocatore si sposti sui due assi con la stessa velocita su dispositivi diversi
 //perchè un dispositivo potrebbe avere una minore densità ma una maggiore velosità di eleborazione
 //per avere la stessa velocità su diversi dispositivi di dovrebbe dividere il metro per il numero di giri fatti in un secondo
-public int lunghezza_in_pixel_dello_schermo;
-public int altezza_in_pixel_dello_schermo;
-public int lunghezza_in_metri_dello_schermo;
-public int altezza_in_metri_dello_schermo;
-public int pixelXmetro_lunghezza;
-public int pixelXmetro_altezza;
+
 public int numero_di_giri_fatti_in_un_secondo=1;//metto 1 per evitare l'overflow
 public static int velocita_metro_al_secondo_asseX;
 public static int velocita_metro_al_secondo_asseY;
@@ -33,7 +29,7 @@ GameVew gameVew;
         super.onCreate(savedInstanceState);
 
         inizializzazioneVariabiliCostanti(this);
-        gameVew=new GameVew(this,lunghezza_in_pixel_dello_schermo,altezza_in_pixel_dello_schermo);
+        gameVew=new GameVew(this, Costanti.lunghezza_in_pixel_dello_schermo,Costanti.altezza_in_pixel_dello_schermo);
         setContentView(gameVew);
     }
 
@@ -45,13 +41,13 @@ GameVew gameVew;
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
         Log.d("GAME","larghezza:"+width+" Altezza:"+height);
-        lunghezza_in_pixel_dello_schermo=width;
-        altezza_in_pixel_dello_schermo=height;
-        lunghezza_in_metri_dello_schermo=34;
-        altezza_in_metri_dello_schermo=13;
-        pixelXmetro_lunghezza=lunghezza_in_pixel_dello_schermo/lunghezza_in_metri_dello_schermo;
-        pixelXmetro_altezza=altezza_in_pixel_dello_schermo/altezza_in_metri_dello_schermo;
-        Log.d("GAME","pixel x metro sull asse X:"+ pixelXmetro_lunghezza+" pixel x metro sull asse Y:"+pixelXmetro_altezza);
+        Costanti.lunghezza_in_pixel_dello_schermo=width;
+        Costanti.altezza_in_pixel_dello_schermo=height;
+        Costanti.lunghezza_in_metri_dello_schermo=34;
+        Costanti.altezza_in_metri_dello_schermo=13;
+        Costanti.pixelXmetro_lunghezza=Costanti.lunghezza_in_pixel_dello_schermo/Costanti.lunghezza_in_metri_dello_schermo;
+        Costanti.pixelXmetro_altezza=Costanti.altezza_in_pixel_dello_schermo/Costanti.altezza_in_metri_dello_schermo;
+        Log.d("GAME","pixel x metro sull asse X:"+ Costanti.pixelXmetro_lunghezza+" pixel x metro sull asse Y:"+Costanti.pixelXmetro_altezza);
 
     }
 
