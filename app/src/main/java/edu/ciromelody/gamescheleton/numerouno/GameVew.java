@@ -40,7 +40,10 @@ boolean playing;
     int angolodirotazione;
     Arrow arrow;
     ArrowLeft arrowLeft;
+    ArrowLeft arrowLeft_freq;
+
     ArrowRight arrowRight;
+    ArrowRight arrowRight_freq;
     ArrowUp arrowUp;
     Dito dito;
     boolean collisionetraduevettori;
@@ -69,6 +72,8 @@ boolean playing;
         arrow=new Arrow((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
         arrowLeft=new ArrowLeft((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
         arrowRight=new ArrowRight((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowLeft_freq=new ArrowLeft((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowRight_freq=new ArrowRight((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
         arrowUp=new ArrowUp((GameActivity)getContext(),larghezzaschermo,altezzaschermo,"frecciasu");
         dito=new Dito((GameActivity)getContext(),larghezzaschermo,altezzaschermo,"dito");
         angolodirotazione=0;
@@ -95,27 +100,19 @@ boolean playing;
         arrow.update();
         arrowUp.update();
         dito.update();
+        arrowLeft_freq.setPositionX(arrowLeft.positionX);
+        arrowLeft_freq.setPositionY(arrowLeft.positionY-(2*arrowLeft_freq.getBitmap().getHeight()));
+        arrowRight_freq.setPositionX(arrowRight.positionX);
+        arrowRight_freq.setPositionY(arrowLeft.positionY-(2*arrowRight_freq.getBitmap().getHeight()));
+        arrowLeft_freq.update();
+        arrowRight_freq.update();
 
         arrow.setPositionY(altezzaschermo/2-arrow.getBitmap().getHeight());
-        if(Rect.intersects(dito.getHitBox(),arrowLeft.getHitBox())){
-            //diminuisci velocita
-            if((Costanti.secondi-tempo_intercorso)>=1){;
-              if(Costanti.velocita>0){
-                   Costanti.velocita-=1;} else if (Costanti.velocita==0) {
-                Costanti.velocita=0;
+        aumentaDiminuisciFreqVel();
 
-                }
-            }
-            tempo_intercorso=Costanti.secondi;
-        }
-        if(Rect.intersects(dito.getHitBox(),arrowRight.getHitBox())){
-            //aumenta velocita
-            if((Costanti.secondi-tempo_intercorso)>=1){;
-                    Costanti.velocita+=1;}
-            tempo_intercorso=Costanti.secondi;
-            Log.d("TOUCH","contatto:dito freccia destra");
-        }
     }
+
+
 
 
     private void drawSchermo() {
@@ -142,15 +139,22 @@ boolean playing;
             canvas.drawText("Altezza  in pixel:" + altezzaschermo, 10, 250, paint);
             canvas.drawText("pixel per metro asse X:" + Costanti.pixelXmetro_lunghezza, 10, 300, paint);
             canvas.drawText("pixel per metro asse Y:" + Costanti.pixelXmetro_altezza, 10, 350, paint);
-            canvas.drawText("secondi:" + Costanti.secondi, 10, 400, paint);
+            canvas.drawText("lunghezza in metri:" + Costanti.lunghezza_in_metri_dello_schermo, 10, 400, paint);
+            canvas.drawText("altezza in metri:" + Costanti.altezza_in_metri_dello_schermo, 10, 450, paint);
+            canvas.drawText("secondi:" + Costanti.secondi, 10, 500, paint);
+
+            canvas.drawText("freq:" + Costanti.frequenza_di_riferimento,arrowLeft_freq.positionX+arrowLeft.getBitmap().getWidth(), arrowRight_freq.positionY+arrowLeft_freq.getBitmap().getHeight()/2, paint);
+
             canvas.drawText("vel:" + Costanti.velocita,arrowLeft.positionX+arrowLeft.getBitmap().getWidth(), arrowRight.positionY+arrowRight.getBitmap().getHeight()/2, paint);
 
 
                arrow.drawArrow(canvas);
                arrowUp.drawArrow(canvas);
                arrowLeft.drawArrow(canvas);
-                arrowRight.drawArrow(canvas);
-                dito.drawArrow(canvas);
+               arrowRight.drawArrow(canvas);
+               dito.drawArrow(canvas);
+              arrowLeft_freq.drawArrow(canvas);
+              arrowRight_freq.drawArrow(canvas);
 
 
 
@@ -186,10 +190,10 @@ boolean playing;
             contatoreCicli=0;
             Costanti.frequenza=frequenza;
             Costanti.secondi+=1;
-            if(frequenza>=31){
+            if(frequenza>=Costanti.frequenza_di_riferimento+1){
                 tempoDiAttesa+=1;
             }
-            if(frequenza<=29){
+            if(frequenza<=Costanti.frequenza_di_riferimento-1){
                 tempoDiAttesa-=1;
             }
         }else {
@@ -225,5 +229,43 @@ boolean playing;
             dito.setPositionY(altezzaschermo/2);
         }
         return true;
+    }
+    private void aumentaDiminuisciFreqVel() {
+        if(Rect.intersects(dito.getHitBox(),arrowLeft.getHitBox())){
+            //diminuisci velocita
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+                if(Costanti.velocita>0){
+                    Costanti.velocita-=1;} else if (Costanti.velocita==0) {
+                    Costanti.velocita=0;
+
+                }
+            }
+            tempo_intercorso=Costanti.secondi;
+        }
+        if(Rect.intersects(dito.getHitBox(),arrowRight.getHitBox())){
+            //aumenta velocita
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+                Costanti.velocita+=1;}
+            tempo_intercorso=Costanti.secondi;
+            Log.d("TOUCH","contatto:dito freccia destra");
+        }
+        if(Rect.intersects(dito.getHitBox(),arrowLeft_freq.getHitBox())){
+            //diminuisci velocita
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+                if(Costanti.frequenza_di_riferimento>0){
+                    Costanti.frequenza_di_riferimento-=1;} else if (Costanti.frequenza_di_riferimento==0) {
+                    Costanti.frequenza_di_riferimento=0;
+
+                }
+            }
+            tempo_intercorso=Costanti.secondi;
+        }
+        if(Rect.intersects(dito.getHitBox(),arrowRight_freq.getHitBox())){
+            //aumenta velocita
+            if((Costanti.secondi-tempo_intercorso)>=1){;
+                Costanti.frequenza_di_riferimento+=1;}
+            tempo_intercorso=Costanti.secondi;
+            Log.d("TOUCH","contatto:dito freccia destra");
+        }
     }
 }

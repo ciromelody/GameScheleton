@@ -12,4 +12,5 @@ public class Costanti {
     public static long frequenza;
     public static int secondi;
     public static int velocita=1;
+    public static int frequenza_di_riferimento=30;
 }
