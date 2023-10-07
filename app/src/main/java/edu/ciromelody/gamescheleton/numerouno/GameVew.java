@@ -132,7 +132,7 @@ boolean playing;
             paint.setTextAlign(Paint.Align.LEFT);
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(50);
-            canvas.drawText("Frequenza:" + frequenza + " Hz", 10, 50, paint);
+            canvas.drawText("Frequenza:" + Costanti.frequenza + " Hz", 10, 50, paint);
             canvas.drawText("Velocita:" + Costanti.velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita "+Costanti.pixelXmetro_lunghezza*Costanti.velocita+" :pixel al secondo", 10, 100, paint);
             canvas.drawText("tempo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
             canvas.drawText("Lunghezza in pixel:" + larghezzaschermo, 10, 200, paint);
