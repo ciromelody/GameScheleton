@@ -6,8 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -37,7 +39,10 @@ boolean playing;
     int altezza_in_metri_dello_schermo=13;
     int angolodirotazione;
     Arrow arrow;
+    ArrowLeft arrowLeft;
+    ArrowRight arrowRight;
     ArrowUp arrowUp;
+    Dito dito;
     boolean collisionetraduevettori;
     boolean visibile;
     BitmapUtility bitmapUtility;
@@ -61,7 +66,10 @@ boolean playing;
 
     private void iniziaGioco() {
         arrow=new Arrow((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowLeft=new ArrowLeft((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
+        arrowRight=new ArrowRight((GameActivity)getContext(),larghezzaschermo,altezzaschermo);
         arrowUp=new ArrowUp((GameActivity)getContext(),larghezzaschermo,altezzaschermo,"frecciasu");
+        dito=new Dito((GameActivity)getContext(),larghezzaschermo,altezzaschermo,"dito");
         angolodirotazione=0;
         collisionetraduevettori=false;
         visibile=true;
@@ -85,13 +93,21 @@ boolean playing;
     private void update() {
         arrow.update();
         arrowUp.update();
+        dito.update();
 
         arrow.setPositionY(altezzaschermo/2-arrow.getBitmap().getHeight());
-        if(arrow.getHitBox().intersect(arrowUp.getHitBox())){
-            // i due oggetti si sono toccati
+        if(Rect.intersects(dito.getHitBox(),arrowLeft.getHitBox())){
+            //diminuisci velocita
+            if(Costanti.velocita>0){
+                   Costanti.velocita-=1;} else if (Costanti.velocita==0) {
+                Costanti.velocita=0;
 
-            collisionetraduevettori = !collisionetraduevettori;
-
+            }
+        }
+        if(Rect.intersects(dito.getHitBox(),arrowRight.getHitBox())){
+            //aumenta velocita
+            Costanti.velocita+=1;
+            Log.d("TOUCH","contatto:dito freccia destra");
         }
     }
 
@@ -121,12 +137,14 @@ boolean playing;
             canvas.drawText("pixel per metro asse X:" + Costanti.pixelXmetro_lunghezza, 10, 300, paint);
             canvas.drawText("pixel per metro asse Y:" + Costanti.pixelXmetro_altezza, 10, 350, paint);
             canvas.drawText("secondi:" + Costanti.secondi, 10, 400, paint);
-
+            canvas.drawText("Costanti.velocita:" + Costanti.velocita,arrowRight.positionX-arrowRight.positionX/2, arrowRight.positionY, paint);
 
 
                arrow.drawArrow(canvas);
                arrowUp.drawArrow(canvas);
-
+               arrowLeft.drawArrow(canvas);
+                arrowRight.drawArrow(canvas);
+                dito.drawArrow(canvas);
 
 
 
@@ -185,5 +203,21 @@ boolean playing;
 
         }
     }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        // Tap is detected
+        if (action == MotionEvent.ACTION_DOWN) {
 
+            Log.d("TOUCH","PRESSEDX:"+(int)event.getX());
+            Log.d("TOUCH","PRESSEDY:"+(int)event.getY());
+            dito.setPositionX((int) event.getX());
+            dito.setPositionY((int) event.getY());
+        }
+        if (action == MotionEvent.ACTION_UP) {
+            dito.setPositionX(larghezzaschermo/2);
+            dito.setPositionY(altezzaschermo/2);
+        }
+        return true;
+    }
 }

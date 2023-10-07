@@ -4,13 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import edu.ciromelody.gamescheleton.R;
 import edu.ciromelody.gamescheleton.utility.BitmapUtility;
 import edu.ciromelody.gamescheleton.utility.Costanti;
 
-public class ArrowUp {
+public class ArrowRight {
     Context context;
     Bitmap bitmap;
     //posizione player
@@ -27,18 +29,17 @@ public class ArrowUp {
      int maxX;
      int minX;
      int velocita;
+    int angolodirotazione;
 
-    public String getNomeSprite() {
-        return nomeSprite;
-    }
-
-    public void setNomeSprite(String nomeSprite) {
-        this.nomeSprite = nomeSprite;
-    }
-
-    String nomeSprite;
     // A hit box for collision detection
     private Rect hitBox;
+
+    public void setRuota(boolean ruota) {
+        this.ruota = ruota;
+    }
+
+    boolean ruota;
+    Paint paintsbagliato;
 
     public void setInvertiDirezione(boolean invertiDirezione) {
         this.invertiDirezione = invertiDirezione;
@@ -49,23 +50,31 @@ public class ArrowUp {
     }
 
     boolean invertiDirezione;
-    public ArrowUp(Context context, int schermoX, int schermoY,String nomeSprite) {
+    public ArrowRight(Context context, int schermoX, int schermoY) {
         this.context=context;
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup);
+        inizializza();
+
+    }
+
+  public void inizializza() {
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright);
         bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
-        positionX=0;
-        positionY=0;
+        positionX=23*Costanti.pixelXmetro_lunghezza+2*bitmap.getWidth(); //a 23 metri
+        positionY=8*Costanti.pixelXmetro_altezza; //a 8 metri
+        Log.d("GAME"," positionX:"+ positionX+"  positionY:"+ positionY);
         hitBox = new Rect(positionX, positionY, bitmap.getWidth(), bitmap.getHeight());
         minX=0;
-        maxX=larghezzaSchermo-bitmap.getWidth();
+        maxX=larghezzaSchermo-getBitmap().getWidth();
         minY=0;
-        maxY=altezzaSchermo-bitmap.getHeight();
+        maxY=altezzaSchermo-getBitmap().getHeight();
         velocita=1;
         invertiDirezione=false;
-        this.nomeSprite=nomeSprite;
-        hitBox=new Rect(positionX,positionY,positionX+bitmap.getWidth(),positionY+bitmap.getHeight());
+        ruota=false;
+        paintsbagliato=new Paint();
+      hitBox=new Rect(positionX,positionY,positionX+bitmap.getWidth(),positionY+bitmap.getHeight());
+
     }
 
     public Bitmap getBitmap() {
@@ -106,23 +115,48 @@ public class ArrowUp {
         hitBox.top=positionY;
         hitBox.right=positionX+bitmap.getWidth();
         hitBox.bottom=positionY+bitmap.getHeight();
-
-
         if(positionX<0){positionX=0;};
         if(positionX>maxX){positionX=maxX;};
         if(positionY<0){positionY=0;};
         if(positionY>maxY){positionY=maxY;};
         if(!invertiDirezione){
-            if(positionY==maxY){invertiDirezione=true;}else { positionY+=Costanti.velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);;}
+            if(positionX==maxX){invertiDirezione=true;}else { positionX+=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
         }else {
-            if(positionY==minY){invertiDirezione=false;}else {  positionY-=Costanti.velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);}
+            if(positionX==minX){invertiDirezione=false;}else {  positionX-=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
            }
-
+        angolodirotazione++;
+        if(angolodirotazione>359){angolodirotazione=0;}
 
     }
     public void drawArrow(Canvas canvas){
 
-        canvas.drawBitmap(bitmap,positionX,positionY,null);
-    }
 
+        canvas.drawBitmap(bitmap,positionX,positionY,null);
+       /* cambiaDimensioneBitmap(altezza_in_metri_arrow*3,altezza_in_metri_arrow*3);
+
+        RotateBitmap(canvas,angolodirotazione);
+        canvas.drawPath(BitmapUtility.disegnaCroce(positionX, positionY,this,paintsbagliato),paintsbagliato);
+        BitmapUtility.disegnaEsplosioneBitmap(canvas,BitmapUtility.splitBitmap(getBitmap(),5,5),positionX,positionY);
+        canvas.drawPath(BitmapUtility.disegnaCroce( positionX, positionY,this,paintsbagliato),paintsbagliato);
+        RotateBitmap(canvas,angolodirotazione);*/
+
+    }
+    public  Bitmap RotateBitmap(Canvas canvas, float angle)
+    {
+        // ruota tutto il canvas questo funziona
+        canvas.save();
+        canvas.rotate(angle, positionX +bitmap.getWidth()/2, positionY + bitmap.getHeight() / 2);
+        canvas.drawBitmap(bitmap, positionX, positionY, null);
+        canvas.restore();
+
+
+
+        return bitmap;
+    }
+    private void cambiaDimensioneBitmap(int larghezza,int altezza){
+
+        int rapporto= getBitmap().getWidth()/ getBitmap().getHeight();
+        Bitmap nuovoBitmap =Bitmap.createScaledBitmap(  getBitmap(), larghezza*rapporto, altezza, false);
+        setBitmap(nuovoBitmap);
+    }
 }

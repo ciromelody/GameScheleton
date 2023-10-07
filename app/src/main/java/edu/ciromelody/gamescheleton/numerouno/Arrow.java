@@ -75,6 +75,7 @@ public class Arrow {
         invertiDirezione=false;
         ruota=false;
         paintsbagliato=new Paint();
+      hitBox=new Rect(positionX,positionY,positionX+bitmap.getWidth(),positionY+bitmap.getHeight());
 
     }
 
@@ -114,16 +115,16 @@ public class Arrow {
         // imposta il rettangolo alle stesse dimensioni del bitpmap
         hitBox.left=positionX;
         hitBox.top=positionY;
-        hitBox.right=bitmap.getWidth();
-        hitBox.right=bitmap.getHeight();
+        hitBox.right=positionX+bitmap.getWidth();
+        hitBox.bottom=positionY+bitmap.getHeight();
         if(positionX<0){positionX=0;};
         if(positionX>maxX){positionX=maxX;};
         if(positionY<0){positionY=0;};
         if(positionY>maxY){positionY=maxY;};
         if(!invertiDirezione){
-            if(positionX==maxX){invertiDirezione=true;}else { positionX+=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
+            if(positionX==maxX){invertiDirezione=true;}else { positionX+=Costanti.velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
         }else {
-            if(positionX==minX){invertiDirezione=false;}else {  positionX-=velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
+            if(positionX==minX){invertiDirezione=false;}else {  positionX-=Costanti.velocita*Costanti.pixelXmetro_lunghezza/(Costanti.frequenza+1);}
            }
         angolodirotazione++;
         if(angolodirotazione>359){angolodirotazione=0;}

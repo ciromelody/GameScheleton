@@ -11,4 +11,5 @@ public class Costanti {
     public static int pixelXmetro_altezza;
     public static long frequenza;
     public static int secondi;
+    public static int velocita=1;
 }

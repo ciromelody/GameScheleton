@@ -5,12 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import edu.ciromelody.gamescheleton.R;
 import edu.ciromelody.gamescheleton.utility.BitmapUtility;
 import edu.ciromelody.gamescheleton.utility.Costanti;
 
-public class ArrowUp {
+public class Dito {
     Context context;
     Bitmap bitmap;
     //posizione player
@@ -49,14 +50,14 @@ public class ArrowUp {
     }
 
     boolean invertiDirezione;
-    public ArrowUp(Context context, int schermoX, int schermoY,String nomeSprite) {
+    public Dito(Context context, int schermoX, int schermoY, String nomeSprite) {
         this.context=context;
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup);
-        bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
-        positionX=0;
-        positionY=0;
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.finger);
+        //bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
+        positionX=larghezzaSchermo/2;
+        positionY=altezzaSchermo/2;
         hitBox = new Rect(positionX, positionY, bitmap.getWidth(), bitmap.getHeight());
         minX=0;
         maxX=larghezzaSchermo-bitmap.getWidth();
@@ -106,17 +107,8 @@ public class ArrowUp {
         hitBox.top=positionY;
         hitBox.right=positionX+bitmap.getWidth();
         hitBox.bottom=positionY+bitmap.getHeight();
-
-
-        if(positionX<0){positionX=0;};
-        if(positionX>maxX){positionX=maxX;};
-        if(positionY<0){positionY=0;};
-        if(positionY>maxY){positionY=maxY;};
-        if(!invertiDirezione){
-            if(positionY==maxY){invertiDirezione=true;}else { positionY+=Costanti.velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);;}
-        }else {
-            if(positionY==minY){invertiDirezione=false;}else {  positionY-=Costanti.velocita*Costanti.pixelXmetro_altezza/(Costanti.frequenza+.1);}
-           }
+        /*Log.d("TOUCH","ditoX:"+positionX);
+        Log.d("TOUCH","ditoY:"+positionY);*/
 
 
     }
