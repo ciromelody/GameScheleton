@@ -14,7 +14,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import edu.ciromelody.gamescheleton.utility.BitmapUtility;
+import edu.ciromelody.gamescheleton.utility.ConvertiLunghezzaStringInPixel;
 import edu.ciromelody.gamescheleton.utility.Costanti;
+import edu.ciromelody.gamescheleton.utility.MacchinaDaScrivereVecchia;
 
 
 public class GameVew extends SurfaceView implements Runnable {
@@ -53,6 +55,7 @@ boolean playing;
     int tempo_intercorso;
 
     int altezza_in_metri_arrow;
+    MacchinaDaScrivereVecchia macchinadascrivere;
     public GameVew(Context context,int lunghezza_in_pixel_asse_X,int lunghezza_in_pixel_asse_Y){
         super(context);
         this.context=context;
@@ -80,7 +83,7 @@ boolean playing;
         collisionetraduevettori=false;
         visibile=true;
         altezza_in_metri_arrow=2*(altezzaschermo/altezza_in_metri_dello_schermo); //due metri
-
+        macchinadascrivere=new MacchinaDaScrivereVecchia((GameActivity)getContext());
 
     }
 
@@ -101,9 +104,9 @@ boolean playing;
         arrowUp.update();
         dito.update();
         arrowLeft_freq.setPositionX(arrowLeft.positionX);
-        arrowLeft_freq.setPositionY(arrowLeft.positionY-(2*arrowLeft_freq.getBitmap().getHeight()));
+        arrowLeft_freq.setPositionY(arrowLeft.positionY-(arrowLeft_freq.getBitmap().getHeight()));
         arrowRight_freq.setPositionX(arrowRight.positionX);
-        arrowRight_freq.setPositionY(arrowLeft.positionY-(2*arrowRight_freq.getBitmap().getHeight()));
+        arrowRight_freq.setPositionY(arrowRight.positionY-(arrowRight_freq.getBitmap().getHeight()));
         arrowLeft_freq.update();
         arrowRight_freq.update();
 
@@ -133,6 +136,8 @@ boolean playing;
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(50);
             canvas.drawText("Frequenza:" + Costanti.frequenza + " Hz", 10, 50, paint);
+            String stringa_velocita="Velocita:" + Costanti.velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita "+Costanti.pixelXmetro_lunghezza*Costanti.velocita+" :pixel al secondo";
+            paint.setTextSize(ConvertiLunghezzaStringInPixel.adattaTextSizePaint(stringa_velocita,larghezzaschermo,(int)paint.getTextSize()));
             canvas.drawText("Velocita:" + Costanti.velocita + " m/s"+"-> Costanti.pixelXmetro_lunghezza*velocita "+Costanti.pixelXmetro_lunghezza*Costanti.velocita+" :pixel al secondo", 10, 100, paint);
             canvas.drawText("tempo di attesa:" + tempoDiAttesa + " millisecondi ", 10, 150, paint);
             canvas.drawText("Lunghezza in pixel:" + larghezzaschermo, 10, 200, paint);
@@ -142,19 +147,27 @@ boolean playing;
             canvas.drawText("lunghezza in metri:" + Costanti.lunghezza_in_metri_dello_schermo, 10, 400, paint);
             canvas.drawText("altezza in metri:" + Costanti.altezza_in_metri_dello_schermo, 10, 450, paint);
             canvas.drawText("secondi:" + Costanti.secondi, 10, 500, paint);
+            //devo fare entrare freq: tra le due frecce ,mi calcolo prima la distanza in pixel poi calcolo textSize paint per
+            //adattare la scritta
+            int distanza_tra_frecce=arrowRight_freq.positionX-(arrowLeft_freq.positionX+arrowLeft.getBitmap().getWidth());
+            Log.d("GAME","distanza_tra_frecce="+distanza_tra_frecce);
+            paint.setTextSize(ConvertiLunghezzaStringInPixel.adattaTextSizePaint("freq:30",distanza_tra_frecce,(int)paint.getTextSize()));
 
             canvas.drawText("freq:" + Costanti.frequenza_di_riferimento,arrowLeft_freq.positionX+arrowLeft.getBitmap().getWidth(), arrowRight_freq.positionY+arrowLeft_freq.getBitmap().getHeight()/2, paint);
-
+           // paint.setTextSize(50);//ripristino il valore precedente
             canvas.drawText("vel:" + Costanti.velocita,arrowLeft.positionX+arrowLeft.getBitmap().getWidth(), arrowRight.positionY+arrowRight.getBitmap().getHeight()/2, paint);
 
             canvas.drawText("La velocità è sempre identica anche se varia la frequenza del telefono",0,550,paint);
-                    arrow.drawArrow(canvas);
+                arrow.drawArrow(canvas);
                arrowUp.drawArrow(canvas);
                arrowLeft.drawArrow(canvas);
                arrowRight.drawArrow(canvas);
                dito.drawArrow(canvas);
               arrowLeft_freq.drawArrow(canvas);
               arrowRight_freq.drawArrow(canvas);
+              macchinadascrivere.update("La velocità orizzontale non è uguale alla velocita verticale - " +
+                                                    "come puoi notare la differenza tra la freccia orizzontale e " +
+                                                     "la freccia verticale. ",larghezzaschermo,canvas,64);
 
 
 

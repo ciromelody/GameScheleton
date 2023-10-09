@@ -55,9 +55,10 @@ public class Dito {
         larghezzaSchermo=schermoX;
         altezzaSchermo=schermoY;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.finger);
-        //bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
+        bitmap =Bitmap.createScaledBitmap(  bitmap, Costanti.pixelXmetro_lunghezza, Costanti.pixelXmetro_altezza, false);
         positionX=larghezzaSchermo/2;
         positionY=altezzaSchermo/2;
+       // bitmap= BitmapUtility.cambiaDimensioneBitmap(bitmap,3* Costanti.pixelXmetro_lunghezza,3*Costanti.pixelXmetro_altezza);
         hitBox = new Rect(positionX, positionY, bitmap.getWidth(), bitmap.getHeight());
         minX=0;
         maxX=larghezzaSchermo-bitmap.getWidth();

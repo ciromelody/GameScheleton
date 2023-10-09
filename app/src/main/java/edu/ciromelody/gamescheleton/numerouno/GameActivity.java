@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import edu.ciromelody.gamescheleton.R;
+import edu.ciromelody.gamescheleton.utility.ConvertiLunghezzaStringInPixel;
 import edu.ciromelody.gamescheleton.utility.Costanti;
 
 public class GameActivity extends AppCompatActivity {
@@ -48,7 +49,8 @@ GameVew gameVew;
         Costanti.pixelXmetro_lunghezza=Costanti.lunghezza_in_pixel_dello_schermo/Costanti.lunghezza_in_metri_dello_schermo;
         Costanti.pixelXmetro_altezza=Costanti.altezza_in_pixel_dello_schermo/Costanti.altezza_in_metri_dello_schermo;
         Log.d("GAME","pixel x metro sull asse X:"+ Costanti.pixelXmetro_lunghezza+" pixel x metro sull asse Y:"+Costanti.pixelXmetro_altezza);
-
+        Costanti.capacita_lettere_per_riga= ConvertiLunghezzaStringInPixel.calcola_quante_lettere_vanno_in_una_riga_in_pixel(width,50);
+        Log.d("GAME","capacita_lettere_per_riga="+Costanti.capacita_lettere_per_riga);
     }
 
     //questo bloccherà il thread della gameview
