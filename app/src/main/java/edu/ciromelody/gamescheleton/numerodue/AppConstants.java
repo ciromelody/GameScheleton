@@ -15,8 +15,8 @@ public class AppConstants {
     static int VELOCITY_OBSTACLES;
     static Context gameActivityContext;
     static boolean playerGrounded;
-    public static   int lunghezza_in_metri_dello_schermo=34;
-    public static  int altezza_in_metri_dello_schermo=13;
+    public static   int lunghezza_in_metri_dello_schermo=24;
+    public static  int altezza_in_metri_dello_schermo=7;
 
     public static int lunghezza_in_pixel_dello_schermo;
     public static  int altezza_in_pixel_dello_schermo;
@@ -45,6 +45,10 @@ public class AppConstants {
         int height = metrics.heightPixels;
         AppConstants.SCREEN_WIDTH = width;
         AppConstants.SCREEN_HEIGHT = height;
+        AppConstants.pixelXmetro_lunghezza= AppConstants.SCREEN_WIDTH/AppConstants.lunghezza_in_metri_dello_schermo;
+        AppConstants.pixelXmetro_altezza=AppConstants.SCREEN_HEIGHT/AppConstants.altezza_in_metri_dello_schermo;
+        AppConstants.frequenza=1;
+
     }
     public static void setGameConstants(){
         AppConstants.gravity = 3;

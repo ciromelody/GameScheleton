@@ -74,6 +74,7 @@ public class GameThread extends Thread {
         if(cicliPerSecondo>=1000){
             frequenza=contatoreCicli;
             //velocita= (larghezzaschermo/lunghezza_in_metri_dello_schermo)/frequenza;
+            AppConstants.frequenza=frequenza;
             cicliPerSecondo=0;
             contatoreCicli=0;
             if(frequenza>=31){

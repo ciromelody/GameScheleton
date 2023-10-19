@@ -17,6 +17,8 @@ public class Player {
     RectF rettangoloASinistra;
     int altezzaBitmap;
     int larghezzaBitmap;
+   int velocitaX;
+  int velocitaY;
 
     public Player(){
         pX = AppConstants.SCREEN_WIDTH/3 - AppConstants.getBitmapBank().getPlayerWidth(0);
@@ -40,6 +42,7 @@ public class Player {
         rettangoloSottoIPiedi=new RectF();
         rettangoloADestra=new RectF();
         rettangoloASinistra=new RectF();
+        velocitaX=AppConstants.pixelXmetro_lunghezza/(int)AppConstants.frequenza;
 
     }
 
@@ -66,6 +69,9 @@ public class Player {
     // Setter method for setting the Y-coordinate
     public void setY(int pY){
         this.pY = pY;
+    }
+    public void setX(int pX){
+        this.pX = pX;
     }
    public void aggiornaRectIntornoAlPlayer(){
         //120 è la dimensione del player
@@ -110,5 +116,28 @@ public class Player {
        rettangoloADestra.left=rectHitboxRight.left;
        rettangoloADestra.bottom=rectHitboxRight.bottom;
        rettangoloADestra.right=rectHitboxRight.right;
+
+      /* velocitaX=AppConstants.pixelXmetro_lunghezza/(int)AppConstants.frequenza;
+       velocitaY=AppConstants.pixelXmetro_altezza/(int)AppConstants.frequenza;*/
+       pX=pX+velocitaX;
+       pY=pY+velocitaY;
+    }
+    void vaiSu(){
+        velocitaX=0;
+        velocitaY=-3*AppConstants.pixelXmetro_altezza/(int)AppConstants.frequenza;
+        pX=pX;
+        pY=pY+velocitaY;
+    }
+    void vaiAvanti(){
+        velocitaX=3*AppConstants.pixelXmetro_lunghezza/(int)AppConstants.frequenza;
+        velocitaY=0;
+    }
+    void vaiGiu(){
+        velocitaX=0;
+        velocitaY=3*AppConstants.pixelXmetro_altezza/(int)AppConstants.frequenza;
+    }
+    void vaiIndietro(){
+        velocitaX=-3*AppConstants.pixelXmetro_lunghezza/(int)AppConstants.frequenza;
+        velocitaY=0;
     }
 }

@@ -8,7 +8,7 @@ import edu.ciromelody.gamescheleton.R;
 import edu.ciromelody.gamescheleton.utility.BitmapUtility;
 
 public class BitmapBank {
-    Bitmap[] player = new Bitmap[11];
+    Bitmap[] player = new Bitmap[15];
     public BitmapBank(Resources res) {
         player[0] = BitmapFactory.decodeResource(res, R.drawable.run1);
         player[1] = BitmapFactory.decodeResource(res, R.drawable.run2);
@@ -21,9 +21,14 @@ public class BitmapBank {
         player[8] = BitmapFactory.decodeResource(res, R.drawable.run9);
         player[9] = BitmapFactory.decodeResource(res, R.drawable.run10);
         player[10] = BitmapFactory.decodeResource(res, R.drawable.run11);
+        player[11] = BitmapFactory.decodeResource(res, R.drawable.run12);
+        player[12] = BitmapFactory.decodeResource(res, R.drawable.run13);
+        player[13] = BitmapFactory.decodeResource(res, R.drawable.run14);
+        player[14] = BitmapFactory.decodeResource(res, R.drawable.run15);
     }
     public Bitmap getPlayer(int pFrame){
-        return  BitmapUtility.cambiaDimensioneBitmap(player[pFrame],120,120);
+        //diciamo che il player è alto 2 metri
+        return  BitmapUtility.cambiaDimensioneBitmap(player[pFrame],AppConstants.pixelXmetro_altezza*2,AppConstants.pixelXmetro_altezza*2);
        // return player[pFrame];
     }
 
