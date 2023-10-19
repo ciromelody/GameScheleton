@@ -7,10 +7,12 @@ import android.os.Bundle;
 import edu.ciromelody.gamescheleton.R;
 
 public class GameActivity extends AppCompatActivity {
-
+    GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game2);
+        AppConstants.initialization(this);
+        gameView = new GameView(this);
+        setContentView(gameView );
     }
 }
