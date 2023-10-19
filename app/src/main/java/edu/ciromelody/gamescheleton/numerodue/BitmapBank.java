@@ -28,15 +28,15 @@ public class BitmapBank {
     }
 
     // Return player width
-    public int getPlayerWidth(){
-        return getPlayer(0).getWidth();
+    public int getPlayerWidth(int pFrame){
+        return getPlayer(pFrame).getWidth();
 
         //return player[0].getWidth();
     }
 
     // Return player height
-    public int getPlayerHeight(){
-        return getPlayer(0).getHeight();
+    public int getPlayerHeight(int pFrame){
+        return getPlayer( pFrame).getHeight();
 
        // return player[0].getHeight();
     }
