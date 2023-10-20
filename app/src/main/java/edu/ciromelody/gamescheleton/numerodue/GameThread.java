@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import edu.ciromelody.gamescheleton.utility.Costanti;
+
 public class GameThread extends Thread {
     Paint paint;
     SurfaceHolder surfaceHolder; //Surfaceholder object reference
@@ -35,11 +37,12 @@ public class GameThread extends Thread {
             Canvas canvas = surfaceHolder.lockCanvas(null);
             if(canvas != null){
                 synchronized (surfaceHolder){
+                    AppConstants.getGameEngine().updateAndDrawBackgroundImage(canvas);
+                    AppConstants.getGameEngine().updateAndDrawPlayer(canvas);
+                  //  AppConstants.getGameEngine().updateAndDrawPupazzi(canvas);
 
-                    AppConstants.getGameEngine().updateAndDrawPlayer(canvas);
-                   /*AppConstants.getGameEngine().updateAndDrawBackgroundImage(canvas);
                    // AppConstants.getGameEngine().updateAndDrawPath(canvas);
-                    AppConstants.getGameEngine().updateAndDrawPlayer(canvas);
+                  /*  AppConstants.getGameEngine().updateAndDrawPlayer(canvas);
                      AppConstants.getGameEngine().updateAndDrawObstacles(canvas);
                     AppConstants.getGameEngine().tapToStart(canvas);
                     AppConstants.getGameEngine().udateAndDrawControl(canvas, framerate,tempoDiAttesa,cicliPerSecondo,paint);*/
@@ -77,11 +80,13 @@ public class GameThread extends Thread {
             AppConstants.frequenza=frequenza;
             cicliPerSecondo=0;
             contatoreCicli=0;
-            if(frequenza>=31){
+            Costanti.secondi+=1;
+            if(frequenza>=AppConstants.frequenza_di_riferimento){
                 tempoDiAttesa+=1;
             }
-            if(frequenza<=29){
+            if(frequenza<=AppConstants.frequenza_di_riferimento){
                 tempoDiAttesa-=1;
+                if(tempoDiAttesa<2){tempoDiAttesa=2;}
             }
         }else {
             contatoreCicli+=1;

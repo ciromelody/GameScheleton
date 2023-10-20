@@ -26,7 +26,7 @@ public class AppConstants {
     public static long frequenza;
     public static int secondi;
     public static int velocita=1;
-    public static int frequenza_di_riferimento=30     ;
+    public static int frequenza_di_riferimento=25     ;
     public static int capacita_lettere_per_riga;
 
     public static void initialization(Context context){
